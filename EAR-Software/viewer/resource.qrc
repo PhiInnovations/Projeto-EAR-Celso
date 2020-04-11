@@ -1,0 +1,14 @@
+<RCC>
+  <qresource prefix="leds">
+    <file alias="green">images/ledGreen.png</file>
+    <file alias="red">images/ledRed.png</file>
+    <file alias="yellow">images/ledYellow.jpg</file>
+  </qresource>
+  <qresource prefix="button">
+    <file alias="load">images/apply.png</file>
+    <file alias="file">images/save.png</file>
+    <file alias="update">images/update.png</file>
+    <file alias="open">images/connected.png</file>
+    <file alias="close">images/disconnected.png</file>
+  </qresource>
+</RCC>
