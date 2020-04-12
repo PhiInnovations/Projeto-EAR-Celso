@@ -1,8 +1,12 @@
 from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QFileDialog
 from pyqtgraph import PlotWidget, plot
 import pyqtgraph as pg
+import numpy as np
+import time
 import logging
 from MainWindowUi import Ui_MainWindow
+from Comm import Comm
 
 class MainWindow(QMainWindow, Ui_MainWindow):
 
@@ -21,8 +25,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Starting comm thread 
         #
         self.comm = Comm(callback=self.on_newMessage)
-        self.btnUpdateSerialList.clicked.connect(self.updateSerialList)
-        self.btnCommConnect.clicked.connect(self.connectSerial)
+        self.btnUpdate.clicked.connect(self.updateSerialList)
+        self.btnConnect.clicked.connect(self.connectSerial)
+        self.btnLoadFile.clicked.connect(self.runFile)
+        self.btnOpenFile.clicked.connect(self.getFile)
         self.comm.start()
 
         #
@@ -30,7 +36,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #
         self.file = None
 
-        self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
+        #
+        # Initialize the plot structure
+        # AS and PS curves
+        #
+        self.bufferSize = 100
+        self.dataAS = np.zeros(self.bufferSize)
+        self.curveAS = self.plot1.plot()
+        self.lineAS = self.plot1.addLine(x=0)
+        self.iAS = 0
+        self.dataPS = np.zeros(self.bufferSize)
+        self.curvePS = self.plot2.plot()
+        self.linePS = self.plot2.addLine(x=0)
+        self.iPS = 0
+        #self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
+
+    def getFile(self):
+        options = QFileDialog.Options()
+        fileName, _ = QFileDialog.getOpenFileName(self,"Dat Files", "","Cert Files (*.dat);;All Files (*)", options=options)
+        if fileName:
+            self.txtFile.setText(fileName)
+
+    def runFile(self):
+        filename = self.txtFile.text()
+        try:
+            with open(filename) as fp:
+                line = fp.readline()
+                self.on_newMessage(line)
+                time.sleep(1)
+                while line:
+                    line = fp.readline()
+                    self.on_newMessage(line)
+                    time.sleep(1)
+            self.statusbar.showMessage("File load successfully")
+        except:
+            self.statusbar.showMessage("Error during file operation")
+            fp.close()
 
     def updateSerialList(self):
         if self.comm is not None:
@@ -93,8 +134,35 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             QMessageBox.warning(self,"Warning","Error with comm instance")
 
-    def plot(self, hour, temperature):
-        self.graphWidget.plot(hour, temperature)
+    def plotPS(self, value):
+        #
+        # Check if it arrived at the end of the plot
+        # In this case, the buffer must be shifted to plot
+        # the last value
+        #
+        if self.iPS == self.bufferSize:
+            self.dataPS = np.roll(self.dataPS,-1)
+            self.dataPS[self.iPS-1] = value
+        else:
+            self.dataPS[self.iPS] = value
+            self.iPS = self.iPS + 1
+        self.curvePS.setData(self.dataPS)
+        pg.QtGui.QApplication.processEvents()
+
+    def plotAS(self, value):
+        #
+        # Check if it arrived at the end of the plot
+        # In this case, the buffer must be shifted to plot
+        # the last value
+        #
+        if self.iAS == self.bufferSize:
+            self.dataAS = np.roll(self.dataAS,-1)
+            self.dataAS[self.iAS-1] = value
+        else:
+            self.dataAS[self.iAS] = value
+            self.iAS = self.iAS + 1
+        self.curveAS.setData(self.dataAS)
+        pg.QtGui.QApplication.processEvents()
 
     def on_newMessage(self,message):
         #
@@ -172,7 +240,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         elif varName == 'AS':
             # Arm sensor position
-            return
+            # Plot the value on a graph
+            self.plotAS(varValue)
         elif varName == 'EA':
             # Arm sensor position error count
             return
@@ -181,7 +250,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         elif varName == 'PS':
             # Px sensor
-            return
+            self.plotPS(varValue)
         elif varName == 'PL':
             # Plateau pressure
             return
