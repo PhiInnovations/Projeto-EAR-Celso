@@ -42,15 +42,31 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #
         self.bufferSize = 100
         self.dataAS = np.zeros(self.bufferSize)
-        self.curveAS = self.plot1.plot()
-        self.lineAS = self.plot1.addLine(x=0)
+        self.curveAS = self.plotAS.plot()
+        self.lineAS = self.plotAS.addLine(x=0)
         self.iAS = 0
         self.dataPS = np.zeros(self.bufferSize)
-        self.curvePS = self.plot2.plot()
-        self.linePS = self.plot2.addLine(x=0)
+        self.curvePS = self.plotPS.plot()
+        self.linePS = self.plotPS.addLine(x=0)
         self.iPS = 0
-        #self.plot([1,2,3,4,5,6,7,8,9,10], [30,32,34,32,33,31,29,32,35,45])
+        #
+        # Initialize bar graphs
+        #
+        self.prepareBarTV()
 
+    def prepareBarTV(self):
+        self.wTV = self.barGraphTV.addPlot()
+        x = [ 0 ]
+        y1 = [ 0 ]
+        self.bgTV = pg.BarGraphItem(x=x, height=y1, width=0.5, brush='r')
+        
+        self.wTV.addItem(self.bgTV)
+        self.wTV.hideAxis('bottom')
+        self.wTV.hideAxis('left')
+
+    def updateBarTV(self,value):
+        self.bgTV.setOpts(height=value)
+    
     def getFile(self):
         options = QFileDialog.Options()
         fileName, _ = QFileDialog.getOpenFileName(self,"Dat Files", "","Cert Files (*.dat);;All Files (*)", options=options)
@@ -134,7 +150,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             QMessageBox.warning(self,"Warning","Error with comm instance")
 
-    def plotPS(self, value):
+    def plotPSCurve(self, value):
         #
         # Check if it arrived at the end of the plot
         # In this case, the buffer must be shifted to plot
@@ -149,7 +165,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.curvePS.setData(self.dataPS)
         pg.QtGui.QApplication.processEvents()
 
-    def plotAS(self, value):
+    def plotASCurve(self, value):
         #
         # Check if it arrived at the end of the plot
         # In this case, the buffer must be shifted to plot
@@ -241,7 +257,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         elif varName == 'AS':
             # Arm sensor position
             # Plot the value on a graph
-            self.plotAS(varValue)
+            self.plotASCurve(varValue)
         elif varName == 'EA':
             # Arm sensor position error count
             return
@@ -250,7 +266,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         elif varName == 'PS':
             # Px sensor
-            self.plotPS(varValue)
+            self.plotPSCurve(varValue)
         elif varName == 'PL':
             # Plateau pressure
             return
