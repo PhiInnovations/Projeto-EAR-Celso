@@ -134,7 +134,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 while line:
                     line = fp.readline()
                     self.on_newMessage(line)
-                    time.sleep(1)
+                    time.sleep(0.1)
             self.statusbar.showMessage("File load successfully")
         except:
             self.statusbar.showMessage("Error during file operation")
@@ -208,11 +208,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # the last value
         #
         if self.iPS == self.bufferSize:
-            self.dataPS = np.roll(self.dataPS,-1)
-            self.dataPS[self.iPS-1] = value
-        else:
-            self.dataPS[self.iPS] = value
-            self.iPS = self.iPS + 1
+            self.iPS = 0
+        self.dataPS[self.iPS] = value
+        self.iPS = self.iPS + 1
         self.curvePS.setData(self.dataPS)
         pg.QtGui.QApplication.processEvents()
 
@@ -223,11 +221,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # the last value
         #
         if self.iAS == self.bufferSize:
-            self.dataAS = np.roll(self.dataAS,-1)
-            self.dataAS[self.iAS-1] = value
-        else:
-            self.dataAS[self.iAS] = value
-            self.iAS = self.iAS + 1
+            self.iAS = 0
+        self.dataAS[self.iAS] = value
+        self.iAS = self.iAS + 1
         self.curveAS.setData(self.dataAS)
         pg.QtGui.QApplication.processEvents()
 
