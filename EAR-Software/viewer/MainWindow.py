@@ -161,7 +161,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 _port = str(self.cbPorts.currentText())
                 logging.debug("Opening port %s at 115200 bps",_port)
 
-                if self.comm.openPort(_port,115200) == True:
+                if self.comm.openPort(_port,57600) == True:
                     # Change the icon
                     icon5 = QtGui.QIcon()
                     icon5.addPixmap(QtGui.QPixmap(":/button/open"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
