@@ -218,6 +218,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.file is not None:
             self.file.write(message)
         #
+        # Update the screen
+        #
+        self.lblMessage.setText(message.strip())
+        #
         # Separate the message content into variables
         #
         vars = message.strip().split(' ')
@@ -291,7 +295,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.plotASCurve(varValue)
         elif varName == 'EA':
             # Arm sensor position error count
-            return
+            self.lblEA.setText(str(varValue))
+        elif varName == 'EI':
+            # TODO: identify
+            self.lblEI.setText(str(varValue))
+        elif varName == 'PH':
+            # TODO: identify
+            self.lblPH.setText(str(varValue))
         elif varName == 'PW':
             # PWM Duty
             return
@@ -303,22 +313,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         elif varName == 'PM':
             # Pressure max limit
+            self.lblPM.setText(str(varValue))
             return
         elif varName == 'AP':
             # Assisted pressure threshold
-            return
+            self.lblAP.setText(str(varValue))
         elif varName == 'TS':
             # Tidal volume enable
-            return
+            self.lblTS.setText(str(varValue))
         elif varName == 'BM':
             # BPM
-            return
+            self.lblPM.setText(str(varValue))
         elif varName == 'IE':
             # IE Ratio
             # 2 means 1:2
             # 3 means 1:3
             # ...
-            return
+            _msg = "1:"+str(varValue)
+            self.lblIE.setText(_msg)
         elif varName == 'TV':
             # Tidal volume
             self.updateBarTV(varValue)
