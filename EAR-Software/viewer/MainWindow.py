@@ -18,6 +18,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Setup UI components and fixed windows size
         #
         self.setupUi(self)
+        self.setFixedSize(self.size())
 
         #
         # Initializing communication and setup comm port
@@ -55,6 +56,25 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.prepareBarTV()
         self.prepareBarPX()
         self.prepareBarAV()
+        #
+        # Initialize the dials
+        #
+        self.pot1.setMinimum(0)
+        self.pot1.setMaximum(600)
+        self.pot1.setValue(0)
+        self.pot1.setEnabled(False)
+        self.pot2.setMinimum(0)
+        self.pot2.setMaximum(600)
+        self.pot2.setValue(0)
+        self.pot2.setEnabled(False)
+        self.pot3.setMinimum(0)
+        self.pot3.setMaximum(600)
+        self.pot3.setValue(0)
+        self.pot3.setEnabled(False)
+        self.pot4.setMinimum(0)
+        self.pot4.setMaximum(600)
+        self.pot4.setValue(0)
+        self.pot4.setEnabled(False)
 
     def prepareBarTV(self):
         self.wTV = self.barGraphTV.addPlot()
@@ -78,7 +98,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         self.wPX.addItem(self.bgPX)
         self.wPX.hideAxis('bottom')
-        self.wPX.setYRange(0,500,padding=0)
+        self.wPX.setYRange(0,100,padding=0)
         #self.wPX.hideAxis('left')
 
     def updateBarPX(self,value):
@@ -273,16 +293,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         elif varName == 'P1':
             # POT 1
-            return
+            self.pot1.setValue(varValue)
         elif varName == 'P2':
             # POT 2
-            return
+            self.pot2.setValue(varValue)
         elif varName == 'P3':
             # POT 3
-            return
+            self.pot3.setValue(varValue)
         elif varName == 'P4':
             # POT 4
-            return
+            self.pot4.setValue(varValue)
         elif varName == 'IM':
             # Motor current
             return

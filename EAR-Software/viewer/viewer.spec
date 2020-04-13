@@ -4,7 +4,7 @@ block_cipher = None
 
 
 a = Analysis(['viewer.py'],
-             pathex=['C:\\Users\\PhiInnovations\\Documents\\Projeto-EAR-Celso\\EAR-Software\\viewer'],
+             pathex=['C:\\phi\\Projeto-EAR-Celso\\EAR-Software\\viewer'],
              binaries=[],
              datas=[],
              hiddenimports=[],
@@ -30,4 +30,4 @@ exe = EXE(pyz,
           upx=True,
           upx_exclude=[],
           runtime_tmpdir=None,
-          console=True )
+          console=False )
