@@ -43,16 +43,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.bufferSize = 100
         self.dataAS = np.zeros(self.bufferSize)
         self.curveAS = self.plotAS.plot()
-        self.lineAS = self.plotAS.addLine(x=0)
+        self.plotAS.setYRange(0,500,padding=0)
         self.iAS = 0
         self.dataPS = np.zeros(self.bufferSize)
         self.curvePS = self.plotPS.plot()
-        self.linePS = self.plotPS.addLine(x=0)
+        self.plotPS.setYRange(0,200,padding=0)
         self.iPS = 0
         #
         # Initialize bar graphs
         #
         self.prepareBarTV()
+        self.prepareBarPX()
+        self.prepareBarAV()
 
     def prepareBarTV(self):
         self.wTV = self.barGraphTV.addPlot()
@@ -62,10 +64,39 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         
         self.wTV.addItem(self.bgTV)
         self.wTV.hideAxis('bottom')
-        self.wTV.hideAxis('left')
+        self.wTV.setYRange(0,500,padding=0)
+        #self.wTV.hideAxis('left')
 
     def updateBarTV(self,value):
         self.bgTV.setOpts(height=value)
+
+    def prepareBarPX(self):
+        self.wPX = self.barGraphPX.addPlot()
+        x = [ 0 ]
+        y1 = [ 0 ]
+        self.bgPX = pg.BarGraphItem(x=x, height=y1, width=0.5, brush='r')
+        
+        self.wPX.addItem(self.bgPX)
+        self.wPX.hideAxis('bottom')
+        self.wPX.setYRange(0,500,padding=0)
+        #self.wPX.hideAxis('left')
+
+    def updateBarPX(self,value):
+        self.bgPX.setOpts(height=value)
+
+    def prepareBarAV(self):
+        self.wAV = self.barGraphAV.addPlot()
+        x = [ 0 ]
+        y1 = [ 0 ]
+        self.bgAV = pg.BarGraphItem(x=x, height=y1, width=0.5, brush='r')
+        
+        self.wAV.addItem(self.bgAV)
+        self.wAV.hideAxis('bottom')
+        self.wAV.setYRange(0,500,padding=0)
+        #self.wTV.hideAxis('left')
+
+    def updateBarAV(self,value):
+        self.bgAV.setOpts(height=value)
     
     def getFile(self):
         options = QFileDialog.Options()
@@ -290,10 +321,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             return
         elif varName == 'TV':
             # Tidal volume
-            return
+            self.updateBarTV(varValue)
         elif varName == 'PX':
             # Measured pressure
-            return
+            self.updateBarPX(varValue)
+        elif varName == 'PX':
+            # Measured pressure
+            self.updateBarAV(varValue)
         else:
             #
             # Unknown

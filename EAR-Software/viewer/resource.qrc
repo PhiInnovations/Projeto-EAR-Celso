@@ -5,6 +5,7 @@
     <file alias="yellow">images/ledYellow.jpg</file>
   </qresource>
   <qresource prefix="button">
+    <file alias="play">images/play.png</file>
     <file alias="load">images/apply.png</file>
     <file alias="file">images/save.png</file>
     <file alias="update">images/update.png</file>

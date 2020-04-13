@@ -147,7 +147,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QWidget" name="barGraphPX" native="true">
+   <widget class="GraphicsLayoutWidget" name="barGraphPX" native="true">
     <property name="geometry">
      <rect>
       <x>400</x>
@@ -342,7 +342,7 @@
     </property>
     <property name="icon">
      <iconset resource="resource.qrc">
-      <normaloff>:/button/load</normaloff>:/button/load</iconset>
+      <normaloff>:/button/play</normaloff>:/button/play</iconset>
     </property>
     <property name="iconSize">
      <size>
@@ -351,7 +351,7 @@
      </size>
     </property>
    </widget>
-   <widget class="QWidget" name="barGraphAV" native="true">
+   <widget class="GraphicsLayoutWidget" name="barGraphAV" native="true">
     <property name="geometry">
      <rect>
       <x>600</x>
@@ -371,7 +371,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>26</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
