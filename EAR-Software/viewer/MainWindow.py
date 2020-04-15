@@ -1,3 +1,5 @@
+from PyQt5 import QtGui
+from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtWidgets import QFileDialog
 from pyqtgraph import PlotWidget, plot
@@ -5,6 +7,7 @@ import pyqtgraph as pg
 import numpy as np
 import time
 import logging
+import datetime
 from MainWindowUi import Ui_MainWindow
 from Comm import Comm
 
@@ -75,6 +78,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pot4.setMaximum(600)
         self.pot4.setValue(0)
         self.pot4.setEnabled(False)
+        #
+        # Update serial list
+        #
+        self.updateSerialList()
 
     def prepareBarTV(self):
         self.wTV = self.barGraphTV.addPlot()
@@ -165,14 +172,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     # Change the icon
                     icon5 = QtGui.QIcon()
                     icon5.addPixmap(QtGui.QPixmap(":/button/open"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                    self.btnCommConnect.setIcon(icon5)
-                    self.btnCommConnect.setIconSize(QtCore.QSize(24, 24))
+                    self.btnConnect.setIcon(icon5)
+                    self.btnConnect.setIconSize(QtCore.QSize(24, 24))
                     # Change the led
-                    self.lblCommStatus.setPixmap(QtGui.QPixmap(":/leds/green"))
+                    self.lblLed.setPixmap(QtGui.QPixmap(":/leds/green"))
                     # Open file for logging received message
                     if self.file is not None:
                         self.file.close()
-                    now = datetime.now()
+                    now = datetime.datetime.now()
                     ts = now.strftime("%Y%m%d%H%M%S")
                     msgFileName = "msgs_" + ts + ".dat"
                     try:
@@ -188,10 +195,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 # Change the icon
                 icon5 = QtGui.QIcon()
                 icon5.addPixmap(QtGui.QPixmap(":/button/close"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-                self.btnCommConnect.setIcon(icon5)
-                self.btnCommConnect.setIconSize(QtCore.QSize(24, 24))
+                self.btnConnect.setIcon(icon5)
+                self.btnConnect.setIconSize(QtCore.QSize(24, 24))
                 # Change the led
-                self.lblCommStatus.setPixmap(QtGui.QPixmap(":/leds/red"))
+                self.lblLed.setPixmap(QtGui.QPixmap(":/leds/red"))
                 #
                 # Close the file
                 #
