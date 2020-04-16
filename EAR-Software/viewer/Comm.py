@@ -44,7 +44,7 @@ class Comm(QThread):
         self.ser.baudrate = baudrate
         try:
             self.ser.open()
-            self.ser.timeout = self.TIMEOUT
+            #self.ser.timeout = self.TIMEOUT
             ret = self.ser.is_open
             if ret == True:
                 logging.debug("Serial port open on %s (%d)",port,baudrate)
