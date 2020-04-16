@@ -8,6 +8,7 @@ import numpy as np
 import time
 import logging
 import datetime
+import sys
 from MainWindowUi import Ui_MainWindow
 from Comm import Comm
 
@@ -82,6 +83,14 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # Update serial list
         #
         self.updateSerialList()
+        #
+        # Save log flag
+        #
+        self.saveLog = False
+        #
+        # Setup exit menu
+        #
+        self.mnuExit.triggered.connect(sys.exit)
 
     def prepareBarTV(self):
         self.wTV = self.barGraphTV.addPlot()
@@ -177,17 +186,19 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     # Change the led
                     self.lblLed.setPixmap(QtGui.QPixmap(":/leds/green"))
                     # Open file for logging received message
-                    if self.file is not None:
-                        self.file.close()
-                    now = datetime.datetime.now()
-                    ts = now.strftime("%Y%m%d%H%M%S")
-                    msgFileName = "msgs_" + ts + ".dat"
-                    try:
-                        self.file = open(msgFileName,"w")
-                    except:
-                        self.statusbar.showMessage("Error opening data.")
-                        self.file = None
-                        return
+                    if self.chkSaveLog.isChecked() == True:
+                        self.saveLog = True
+                        if self.file is not None:
+                            self.file.close()
+                        now = datetime.datetime.now()
+                        ts = now.strftime("%Y%m%d%H%M%S")
+                        msgFileName = "msgs_" + ts + ".dat"
+                        try:
+                            self.file = open(msgFileName,"w")
+                        except:
+                            self.statusbar.showMessage("Error opening data.")
+                            self.file = None
+                            return
                 else:
                     QMessageBox.warning(self,"Warning","Error opening serial port")
             else:
@@ -238,8 +249,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         #
         # Save the received message to the file
         #
-        if self.file is not None:
-            self.file.write(message)
+        if self.saveLog == True:
+            if self.file is not None:
+                self.file.write(message)
         #
         # Update the screen
         #

@@ -28,6 +28,9 @@
     </Compile>
     <Compile Include="MainWindowUi.py" />
     <Compile Include="resource_rc.py" />
+    <Compile Include="tester.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="viewer.py" />
   </ItemGroup>
   <ItemGroup>

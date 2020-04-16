@@ -38,7 +38,7 @@ class Ui_MainWindow(object):
         self.btnConnect.setIconSize(QtCore.QSize(24, 24))
         self.btnConnect.setObjectName("btnConnect")
         self.btnUpdate = QtWidgets.QPushButton(self.centralwidget)
-        self.btnUpdate.setGeometry(QtCore.QRect(230, 30, 31, 28))
+        self.btnUpdate.setGeometry(QtCore.QRect(230, 30, 31, 31))
         self.btnUpdate.setText("")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap(":/button/update"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -146,14 +146,23 @@ class Ui_MainWindow(object):
         self.lblEI.setText("")
         self.lblEI.setAlignment(QtCore.Qt.AlignCenter)
         self.lblEI.setObjectName("lblEI")
+        self.chkSaveLog = QtWidgets.QCheckBox(self.centralwidget)
+        self.chkSaveLog.setGeometry(QtCore.QRect(270, 31, 70, 31))
+        self.chkSaveLog.setObjectName("chkSaveLog")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
         self.menubar.setObjectName("menubar")
+        self.menuSystem = QtWidgets.QMenu(self.menubar)
+        self.menuSystem.setObjectName("menuSystem")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.mnuExit = QtWidgets.QAction(MainWindow)
+        self.mnuExit.setObjectName("mnuExit")
+        self.menuSystem.addAction(self.mnuExit)
+        self.menubar.addAction(self.menuSystem.menuAction())
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -161,5 +170,8 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "e-AR Emergency Ventilator"))
+        self.chkSaveLog.setText(_translate("MainWindow", "Save Log"))
+        self.menuSystem.setTitle(_translate("MainWindow", "System"))
+        self.mnuExit.setText(_translate("MainWindow", "Exit"))
 from pyqtgraph import GraphicsLayoutWidget, PlotWidget
 import resource_rc
